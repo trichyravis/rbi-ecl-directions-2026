@@ -1,8 +1,8 @@
 """Shared visual identity for the Mountain Path Academy — RBI ECL Directions app.
 
-A small but consistent design system: colour tokens, typography, reusable CSS
-injected once per page, plus helpers for cards, metric tiles, hero banners and
-chart styling so every page feels like it belongs to the same publication.
+Design system ported from the Probability & Distributions app:
+  Dark-blue / Gold palette, Playfair Display + Source Serif Pro typography,
+  dark sidebar, brand banner, definition/example/Excel boxes, stat chips.
 """
 
 from __future__ import annotations
@@ -10,38 +10,47 @@ from __future__ import annotations
 import streamlit as st
 
 # ---------------------------------------------------------------------------
-# Colour tokens — kept in one place so charts and CSS stay in sync
+# Colour tokens — Mountain Path dark-blue / gold palette
 # ---------------------------------------------------------------------------
+DARKBLUE  = "#003366"
+LIGHTBLUE = "#ADD8E6"
+GOLD      = "#FFD700"
+ACCENTRED = "#B22234"
+EXCEL_GRN = "#217346"
+PY_DARK   = "#1E3250"
+OFFWHITE  = "#F7FAFC"
+
+# Backward-compatible COLORS dict used by page files
 COLORS = {
-    "pine":     "#2F5D50",   # primary — deep mountain pine
-    "moss":     "#5C8374",   # secondary green
-    "sage":     "#9EC8B9",   # tertiary / accent green
-    "parchment":"#FBF7EE",   # background
-    "paper":    "#F1E8D6",   # secondary background
-    "slate":    "#1F2A24",   # body text
-    "stone":    "#6F6A5F",   # muted text / borders
-    "ember":    "#B8552B",   # accent for warnings / regulatory floor breaches
-    "gold":     "#C8A24B",   # accent for highlights, CET1, capital
-    "snow":     "#FFFFFF",
+    "pine":      DARKBLUE,
+    "moss":      "#004d99",
+    "sage":      LIGHTBLUE,
+    "parchment": OFFWHITE,
+    "paper":     "#EBF0F5",
+    "slate":     "#1a1a2e",
+    "stone":     "#6F6A5F",
+    "ember":     ACCENTRED,
+    "gold":      GOLD,
+    "snow":      "#FFFFFF",
 }
 
 STAGE_COLORS = {
-    1: COLORS["sage"],
-    2: COLORS["gold"],
-    3: COLORS["ember"],
+    1: LIGHTBLUE,
+    2: GOLD,
+    3: ACCENTRED,
 }
 
 PLOTLY_TEMPLATE = {
     "layout": {
-        "font": {"family": "Georgia, 'Times New Roman', serif", "color": COLORS["slate"], "size": 13},
-        "paper_bgcolor": COLORS["parchment"],
-        "plot_bgcolor": COLORS["parchment"],
-        "colorway": [COLORS["pine"], COLORS["moss"], COLORS["gold"], COLORS["ember"], COLORS["sage"], COLORS["stone"]],
-        "xaxis": {"gridcolor": "#E5DCC4", "zerolinecolor": "#E5DCC4"},
-        "yaxis": {"gridcolor": "#E5DCC4", "zerolinecolor": "#E5DCC4"},
-        "legend": {"bgcolor": "rgba(0,0,0,0)"},
-        "title": {"font": {"family": "'Playfair Display', Georgia, serif", "size": 18}},
-        "margin": {"l": 60, "r": 30, "t": 60, "b": 50},
+        "font": {"family": "Source Serif Pro, Georgia, serif", "color": DARKBLUE, "size": 13},
+        "paper_bgcolor": "#ffffff",
+        "plot_bgcolor": "#ffffff",
+        "colorway": [DARKBLUE, "#004d99", GOLD, ACCENTRED, LIGHTBLUE, "#6F6A5F"],
+        "xaxis": {"gridcolor": "#e6eaf0", "zerolinecolor": "#e6eaf0", "linecolor": DARKBLUE},
+        "yaxis": {"gridcolor": "#e6eaf0", "zerolinecolor": "#e6eaf0", "linecolor": DARKBLUE},
+        "legend": {"bgcolor": "#ffffff", "bordercolor": DARKBLUE, "borderwidth": 1},
+        "title": {"font": {"family": "Playfair Display, Georgia, serif", "size": 18, "color": DARKBLUE}},
+        "margin": {"l": 60, "r": 20, "t": 60, "b": 50},
     }
 }
 
@@ -57,90 +66,247 @@ def style_fig(fig):
 # ---------------------------------------------------------------------------
 _CSS = f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+Pro:wght@400;600&display=swap');
 
 html, body, [class*="css"] {{
-    font-family: 'Inter', Georgia, serif;
-    color: {COLORS['slate']};
+    font-family: 'Source Serif Pro', Georgia, 'Times New Roman', serif;
 }}
 
+/* Container */
+.block-container {{
+    padding-top: 1rem;
+    padding-bottom: 3rem;
+    max-width: 1280px;
+}}
+
+/* Sidebar — dark blue */
+[data-testid="stSidebar"] {{
+    background: linear-gradient(180deg, {DARKBLUE} 0%, #001f3d 100%);
+}}
+[data-testid="stSidebar"] * {{
+    color: #ffffff !important;
+}}
+[data-testid="stSidebar"] .stRadio > label > div {{
+    color: #ffffff !important;
+}}
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3 {{
+    color: {GOLD} !important;
+    font-family: 'Playfair Display', serif;
+}}
+
+/* Headings */
 h1, h2, h3, h4 {{
     font-family: 'Playfair Display', Georgia, serif;
-    color: {COLORS['pine']};
+    color: {DARKBLUE};
     letter-spacing: -0.01em;
 }}
+h1 {{ font-weight: 900; }}
+h2 {{ border-bottom: 3px solid {GOLD}; padding-bottom: 0.35rem; margin-top: 1.2rem; }}
 
-h1 {{ font-weight: 700; }}
-h2 {{ border-bottom: 1px solid #E5DCC4; padding-bottom: 0.35rem; margin-top: 1.2rem; }}
-
-/* sidebar */
-section[data-testid="stSidebar"] {{
-    background: linear-gradient(180deg, {COLORS['paper']} 0%, {COLORS['parchment']} 100%);
-    border-right: 1px solid #E5DCC4;
+/* Brand banner (replaces hero) */
+.mp-brand-banner {{
+    background: linear-gradient(135deg, {DARKBLUE} 0%, #001f3d 100%);
+    color: #ffffff;
+    padding: 22px 30px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    border-bottom: 4px solid {GOLD};
+}}
+.mp-brand-banner h1 {{
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    margin: 0;
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    color: #ffffff;
+}}
+.mp-brand-banner .sub {{
+    font-style: italic;
+    color: {LIGHTBLUE};
+    font-size: 1.05rem;
+}}
+.mp-brand-banner .dot {{
+    color: {GOLD};
+    font-weight: bold;
 }}
 
-section[data-testid="stSidebar"] h1,
-section[data-testid="stSidebar"] h2,
-section[data-testid="stSidebar"] h3 {{
-    color: {COLORS['pine']};
-}}
-
-/* hero banner */
+/* hero — kept as alias to brand-banner for compatibility */
 .hero {{
-    background: linear-gradient(135deg, {COLORS['pine']} 0%, {COLORS['moss']} 60%, {COLORS['sage']} 100%);
-    color: {COLORS['snow']};
-    padding: 2.2rem 2rem 1.8rem 2rem;
-    border-radius: 14px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 6px 20px rgba(47, 93, 80, 0.15);
+    background: linear-gradient(135deg, {DARKBLUE} 0%, #001f3d 100%);
+    color: #ffffff;
+    padding: 22px 30px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    border-bottom: 4px solid {GOLD};
 }}
 .hero h1 {{
-    color: {COLORS['snow']};
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    color: #ffffff;
     margin: 0 0 0.4rem 0;
     font-size: 2.0rem;
-    font-weight: 700;
+    letter-spacing: 2px;
 }}
 .hero .eyebrow {{
     text-transform: uppercase;
     letter-spacing: 0.18em;
     font-size: 0.72rem;
-    opacity: 0.85;
+    color: {GOLD};
     margin-bottom: 0.6rem;
 }}
 .hero p {{
-    color: rgba(255,255,255,0.92);
+    color: {LIGHTBLUE};
     margin: 0;
     font-size: 1.02rem;
     max-width: 80ch;
+    font-style: italic;
 }}
 
-/* card */
+/* Page title / section */
+.mp-title {{
+    font-family: 'Playfair Display', serif;
+    color: {DARKBLUE};
+    font-size: 2.0rem;
+    font-weight: 900;
+    margin: 18px 0 4px 0;
+    padding-bottom: 8px;
+    border-bottom: 3px solid {GOLD};
+}}
+.mp-section {{
+    font-family: 'Playfair Display', serif;
+    color: {DARKBLUE};
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    padding-left: 10px;
+    border-left: 5px solid {GOLD};
+}}
+
+/* card — dark blue metric card */
 .mp-card {{
-    background: {COLORS['snow']};
-    border: 1px solid #E5DCC4;
-    border-radius: 12px;
+    background: #ffffff;
+    border: 1.5px solid {DARKBLUE}33;
+    border-radius: 8px;
     padding: 1.1rem 1.2rem;
     margin-bottom: 0.9rem;
-    box-shadow: 0 1px 4px rgba(31,42,36,0.04);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }}
 .mp-card .label {{
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    color: {COLORS['stone']};
+    color: {GOLD};
     font-size: 0.72rem;
     font-weight: 600;
     margin-bottom: 0.4rem;
 }}
 .mp-card h3 {{
     margin: 0 0 0.4rem 0;
-    color: {COLORS['pine']};
+    color: {DARKBLUE};
     font-size: 1.05rem;
 }}
 .mp-card .value {{
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.6rem;
-    color: {COLORS['pine']};
+    color: {DARKBLUE};
     font-weight: 700;
+}}
+
+/* Stat chip row */
+.stat-chip {{
+    background: {DARKBLUE};
+    color: #ffffff;
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}}
+.stat-chip .label {{
+    color: {GOLD};
+    font-size: 0.82rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}}
+.stat-chip .val {{
+    font-size: 1.35rem;
+    font-weight: 700;
+}}
+
+/* Definition box (blue) */
+.defn-box {{
+    background: {LIGHTBLUE}33;
+    border: 1.5px solid {DARKBLUE};
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 10px 0 14px 0;
+}}
+.defn-box .head {{
+    background: {DARKBLUE};
+    color: #ffffff;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+}}
+
+/* Example / illustration box (gold) */
+.ex-box {{
+    background: #fffbe6;
+    border: 1.5px solid {GOLD};
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 10px 0 14px 0;
+}}
+.ex-box .head {{
+    background: {GOLD};
+    color: {DARKBLUE};
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+}}
+
+/* Excel box (green) */
+.xl-box {{
+    background: #eaf7ef;
+    border: 1.5px solid {EXCEL_GRN};
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 10px 0 14px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+}}
+.xl-box .head {{
+    background: {EXCEL_GRN};
+    color: #ffffff;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+    font-family: 'Source Serif Pro', serif;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+}}
+
+/* Summary box (gold tint) */
+.sum-box {{
+    background: #fff7d1;
+    border: 1.5px solid {DARKBLUE};
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 12px 0;
 }}
 
 /* stage chips */
@@ -153,53 +319,84 @@ section[data-testid="stSidebar"] h3 {{
     letter-spacing: 0.06em;
     text-transform: uppercase;
 }}
-.stage-1 {{ background: #DDEDE5; color: #2F5D50; }}
-.stage-2 {{ background: #F4E2BE; color: #8B6A1E; }}
+.stage-1 {{ background: {LIGHTBLUE}55; color: {DARKBLUE}; }}
+.stage-2 {{ background: #FFF3C4; color: #8B6A1E; }}
 .stage-3 {{ background: #F4D6C5; color: #7B3416; }}
 
-/* call-out boxes */
+/* call-out boxes — info/warn/default */
 .callout {{
-    border-left: 4px solid {COLORS['gold']};
-    background: #FBF3DD;
+    border-left: 5px solid {GOLD};
+    background: #fffbe6;
     padding: 0.9rem 1.1rem;
     border-radius: 6px;
     margin: 0.8rem 0;
-    color: {COLORS['slate']};
+    color: {DARKBLUE};
 }}
-.callout.warn  {{ border-left-color: {COLORS['ember']}; background: #FBE6DA; }}
-.callout.info  {{ border-left-color: {COLORS['moss']};  background: #E7F0EB; }}
-.callout strong {{ color: {COLORS['pine']}; }}
+.callout.warn  {{ border-left-color: {ACCENTRED}; background: #fde8e8; }}
+.callout.info  {{ border-left-color: {DARKBLUE};  background: {LIGHTBLUE}33; }}
+.callout strong {{ color: {DARKBLUE}; }}
 
-/* footer */
+/* Footer */
 .mp-footer {{
-    color: {COLORS['stone']};
-    font-size: 0.78rem;
+    margin-top: 40px;
+    padding: 14px;
+    background: {DARKBLUE};
+    color: #ffffff;
     text-align: center;
-    margin-top: 2.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid #E5DCC4;
+    border-top: 4px solid {GOLD};
+    border-radius: 6px;
+    font-size: 0.9rem;
 }}
+.mp-footer .gold {{ color: {GOLD}; font-weight: 700; }}
 
-/* tighten metric default */
+/* Metrics */
+[data-testid="stMetric"] {{
+    background: #ffffff;
+    border: 1px solid {DARKBLUE}33;
+    border-radius: 6px;
+    padding: 8px 10px;
+}}
+[data-testid="stMetricLabel"] {{
+    color: {DARKBLUE} !important;
+    font-weight: 600 !important;
+}}
 [data-testid="stMetricValue"] {{
     font-family: 'Playfair Display', Georgia, serif;
-    color: {COLORS['pine']};
+    color: {DARKBLUE};
 }}
 
-/* table polish */
+/* Tables */
+.dataframe th {{
+    background: {DARKBLUE} !important;
+    color: #ffffff !important;
+}}
 .stDataFrame, .stTable {{
     border-radius: 8px;
     overflow: hidden;
 }}
 
-/* tab polish */
+/* Buttons */
+.stButton>button {{
+    background: {DARKBLUE};
+    color: #ffffff;
+    border: 1.5px solid {GOLD};
+    border-radius: 6px;
+    font-weight: 600;
+}}
+.stButton>button:hover {{
+    background: {GOLD};
+    color: {DARKBLUE};
+    border: 1.5px solid {DARKBLUE};
+}}
+
+/* Tab polish */
 .stTabs [data-baseweb="tab-list"] button {{
-    font-family: 'Inter', sans-serif;
+    font-family: 'Source Serif Pro', sans-serif;
     font-weight: 500;
 }}
 .stTabs [aria-selected="true"] {{
-    color: {COLORS['pine']} !important;
-    border-bottom-color: {COLORS['pine']} !important;
+    color: {DARKBLUE} !important;
+    border-bottom-color: {GOLD} !important;
 }}
 </style>
 """
@@ -211,7 +408,7 @@ def apply_theme():
 
 
 def hero(title: str, subtitle: str, eyebrow: str = "RBI ECL Directions, 2026"):
-    """A consistent banner for each page."""
+    """A consistent dark-blue banner for each page."""
     st.markdown(
         f"""
         <div class="hero">
@@ -222,6 +419,24 @@ def hero(title: str, subtitle: str, eyebrow: str = "RBI ECL Directions, 2026"):
         """,
         unsafe_allow_html=True,
     )
+
+
+def brand_banner():
+    """Full Mountain Path brand banner (used on Home page)."""
+    st.markdown(
+        f"""
+        <div class="mp-brand-banner">
+            <h1>THE MOUNTAIN PATH</h1>
+            <div class="sub">World of Finance <span class="dot">&bull;</span> themountainpathacademy.com</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def section(text: str):
+    """A gold-bordered section header."""
+    st.markdown(f'<div class="mp-section">{text}</div>', unsafe_allow_html=True)
 
 
 def card(label: str, title: str, value: str, body: str = ""):
@@ -240,26 +455,72 @@ def card(label: str, title: str, value: str, body: str = ""):
     )
 
 
+def defn_box(title: str, body_md: str):
+    """Definition box — blue theme."""
+    st.markdown(
+        f'<div class="defn-box"><span class="head">{title}</span><br>{body_md}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def ex_box(title: str, body_md: str):
+    """Example / illustration box — gold theme."""
+    st.markdown(
+        f'<div class="ex-box"><span class="head">{title}</span><br>{body_md}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def xl_box(title: str, body_md: str):
+    """Excel formula box — green theme."""
+    st.markdown(
+        f'<div class="xl-box"><span class="head">{title}</span><br>{body_md}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def sum_box(body_md: str):
+    """Summary box — gold tint."""
+    st.markdown(f'<div class="sum-box">{body_md}</div>', unsafe_allow_html=True)
+
+
+def stat_chip_row(items):
+    """Row of dark-blue stat chips. items = list of (label, value) tuples."""
+    cols = st.columns(len(items))
+    for c, (lbl, val) in zip(cols, items):
+        with c:
+            st.markdown(
+                f'<div class="stat-chip"><div class="label">{lbl}</div>'
+                f'<div class="val">{val}</div></div>',
+                unsafe_allow_html=True,
+            )
+
+
 def callout(text: str, kind: str = "info"):
-    """Render a coloured side-bar style callout. kind ∈ {info, warn, default}."""
+    """Render a coloured side-bar style callout. kind in {info, warn, default}."""
     cls = f"callout {kind}".strip()
     st.markdown(f"<div class='{cls}'>{text}</div>", unsafe_allow_html=True)
 
 
 def stage_chip(stage: int) -> str:
     """Return HTML for a Stage 1 / 2 / 3 pill."""
-    label = {1: "Stage 1 · Performing", 2: "Stage 2 · SICR", 3: "Stage 3 · NPA"}[stage]
+    label = {1: "Stage 1 - Performing", 2: "Stage 2 - SICR", 3: "Stage 3 - NPA"}[stage]
     return f"<span class='stage-chip stage-{stage}'>{label}</span>"
 
 
 def footer():
-    """Render the consistent footer with circular reference."""
+    """Render the consistent dark-blue footer."""
     st.markdown(
-        """
+        f"""
         <div class="mp-footer">
-            The Mountain Path Academy &nbsp;·&nbsp; Source: RBI Circular DOR.STR.REC.No.6/21.06.011/2026-27 dated 27-Apr-2026
-            &nbsp;·&nbsp; Effective 1-Apr-2027
-            <br/>Educational illustration only — not investment, accounting or regulatory advice.
+            <span class="gold">The Mountain Path &mdash; World of Finance</span> &nbsp;&bull;&nbsp;
+            Prof. V. Ravichandran &nbsp;&bull;&nbsp;
+            <i>Bridging Theory with Practice</i> &nbsp;&bull;&nbsp;
+            <a href="https://themountainpathacademy.com" target="_blank" style="color:{GOLD};text-decoration:none;">themountainpathacademy.com</a>
+            <br/>
+            Source: RBI Circular DOR.STR.REC.No.6/21.06.011/2026-27 dated 27-Apr-2026
+            &nbsp;&bull;&nbsp; Effective 1-Apr-2027
+            <br/>Educational illustration only &mdash; not investment, accounting or regulatory advice.
         </div>
         """,
         unsafe_allow_html=True,
@@ -269,7 +530,7 @@ def footer():
 def page_setup(page_title: str, icon: str = "🏔️"):
     """Shorthand: set page config + apply theme. Call first in every page."""
     st.set_page_config(
-        page_title=f"{page_title} · RBI ECL Directions, 2026",
+        page_title=f"{page_title} - RBI ECL Directions, 2026",
         page_icon=icon,
         layout="wide",
         initial_sidebar_state="expanded",
@@ -297,9 +558,7 @@ def fmt_pct(value: float, decimals: int = 2) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Table rendering helper — robust whether or not jinja2 is installed.
-# pandas.DataFrame.style depends on jinja2; if it's missing we fall back to
-# pre-formatted strings so the page still renders.
+# Table rendering helper
 # ---------------------------------------------------------------------------
 
 def _has_jinja2() -> bool:
@@ -311,12 +570,7 @@ def _has_jinja2() -> bool:
 
 
 def show_table(df, fmt: dict | None = None, **kwargs):
-    """Render a DataFrame with optional column-format dict, jinja2-safe.
-
-    Examples
-    --------
-    >>> show_table(df, {"Period ECL (₹)": "{:,.0f}", "PD": "{:.4f}"})
-    """
+    """Render a DataFrame with optional column-format dict, jinja2-safe."""
     import pandas as _pd
     import streamlit as _st
 
@@ -329,7 +583,6 @@ def show_table(df, fmt: dict | None = None, **kwargs):
         return
 
     def _safe_apply(value, spec):
-        """Apply a format spec, leaving the raw value if the spec doesn't fit."""
         if value is None or (isinstance(value, float) and _pd.isna(value)):
             return "—"
         try:
@@ -339,15 +592,13 @@ def show_table(df, fmt: dict | None = None, **kwargs):
 
     if _has_jinja2():
         try:
-            # Wrap each formatter so jinja2/pandas don't crash on mixed-type cells
             safe_fmt = {col: (lambda v, _s=spec: _safe_apply(v, _s))
                         for col, spec in fmt.items() if col in df.columns}
             _st.dataframe(df.style.format(safe_fmt), **kwargs)
             return
         except Exception:
-            pass  # fall through to manual formatting
+            pass
 
-    # Fallback: format columns to strings and display the raw DataFrame
     df2 = df.copy()
     for col, spec in fmt.items():
         if col in df2.columns:
