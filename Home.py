@@ -8,9 +8,15 @@ from __future__ import annotations
 
 import streamlit as st
 
-from utils.theme import page_setup, hero, callout, footer, COLORS
+from utils.theme import (
+    page_setup, brand_banner, hero, callout, footer, section,
+    stat_chip_row, defn_box, COLORS, GOLD, DARKBLUE, LIGHTBLUE,
+)
 
 page_setup("Home", icon="🏔️")
+
+# Brand banner at top
+brand_banner()
 
 hero(
     title="RBI ECL Directions, 2026 — A Practitioner's Guide",
@@ -24,9 +30,18 @@ hero(
 # Sidebar
 # ----------------------------------------------------------------------------
 with st.sidebar:
-    st.markdown(f"### 🏔️ Mountain Path Academy")
-    st.caption("Risk · Finance · Modelling")
-    st.markdown("---")
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.markdown("")
     st.markdown("**Use the page navigator above** to jump between modules. Suggested order:")
     st.markdown(
         "1. Overview & Three Pillars\n"
@@ -45,25 +60,23 @@ with st.sidebar:
 
 
 # ----------------------------------------------------------------------------
-# Hero metrics — the headline takeaways
+# Hero metrics — stat chips
 # ----------------------------------------------------------------------------
-st.subheader("The shift in one screen")
+section("The shift in one screen")
 
-col1, col2, col3, col4 = st.columns(4)
-with col1:
-    st.metric("Effective Date", "1-Apr-2027", help="Entire loan portfolio fair-valued; opening ECL computed.")
-with col2:
-    st.metric("Loss Model", "Forward-looking", help="Replaces incurred-loss IRAC framework.")
-with col3:
-    st.metric("Stages", "3 + POCI", help="Stage 1 (12-mo ECL), Stage 2 (lifetime), Stage 3 (NPA / lifetime).")
-with col4:
-    st.metric("CET1 Phase-In", "4 years", help="80% → 60% → 40% → 20% add-back to opening CET1.")
+stat_chip_row([
+    ("Effective Date", "1-Apr-2027"),
+    ("Loss Model", "Forward-looking"),
+    ("Stages", "3 + POCI"),
+    ("CET1 Phase-In", "4 years"),
+])
 
+st.markdown("")
 
 # ----------------------------------------------------------------------------
 # Three pillars
 # ----------------------------------------------------------------------------
-st.subheader("Three pillars of the framework")
+section("Three pillars of the framework")
 
 c1, c2, c3 = st.columns(3)
 with c1:
@@ -107,7 +120,7 @@ with c3:
 # ----------------------------------------------------------------------------
 # Key dates
 # ----------------------------------------------------------------------------
-st.subheader("Key dates")
+section("Key dates")
 
 import pandas as pd
 dates = pd.DataFrame(
@@ -130,15 +143,16 @@ st.dataframe(dates, use_container_width=True, hide_index=True)
 # ----------------------------------------------------------------------------
 left, right = st.columns([1, 1])
 with left:
-    st.subheader("Applicability")
-    st.markdown(
-        "- **Applies to:** All Commercial Banks (including SBI, banking companies, "
-        "corresponding new banks)\n"
-        "- **Excluded:** Small Finance Banks (SFBs), Payment Banks, Local Area Banks (LABs), "
+    section("Applicability")
+    defn_box(
+        "SCOPE",
+        "<b>Applies to:</b> All Commercial Banks (including SBI, banking companies, "
+        "corresponding new banks)<br><br>"
+        "<b>Excluded:</b> Small Finance Banks (SFBs), Payment Banks, Local Area Banks (LABs), "
         "Regional Rural Banks (RRBs)"
     )
 with right:
-    st.subheader("Why this matters")
+    section("Why this matters")
     callout(
         "<b>Day-1 Stage 1 ECL</b> is a new cost on the entire performing book. "
         "Even healthy loans now attract a 12-month ECL provision — the largest behavioural change "
@@ -151,17 +165,16 @@ with right:
         kind="warn",
     )
 
-st.subheader("What this app contains")
-st.markdown(
-    """
-    - **Interactive calculators** for every quantitative concept in the circular
-      (PD × LGD × EAD, scenario weighting, EIR, CET1 transition).
-    - **Reference tables** for all 15 Stage 1/2 product floors and all Stage 3 ageing buckets.
-    - **A loan deep-dive** taking a single ₹100 cr loan from disbursal through SICR, default and cure.
-    - **Six case studies** — retail unsecured, housing restructure, project-finance DCCO, wilful-defaulter
-      / fraud overlays, trade-receivables simplified matrix, and a bank-level portfolio stress test.
-    - **Detailed notes & glossary** for every chapter and every abbreviation.
-    """
+section("What this app contains")
+defn_box(
+    "MODULES",
+    "<b>Interactive calculators</b> for every quantitative concept in the circular "
+    "(PD x LGD x EAD, scenario weighting, EIR, CET1 transition).<br>"
+    "<b>Reference tables</b> for all 15 Stage 1/2 product floors and all Stage 3 ageing buckets.<br>"
+    "<b>Loan deep-dive</b> taking a single &#8377;100 cr loan from disbursal through SICR, default and cure.<br>"
+    "<b>Six case studies</b> — retail unsecured, housing restructure, project-finance DCCO, wilful-defaulter "
+    "/ fraud overlays, trade-receivables simplified matrix, and a bank-level portfolio stress test.<br>"
+    "<b>Detailed notes &amp; glossary</b> for every chapter and every abbreviation."
 )
 
 footer()
