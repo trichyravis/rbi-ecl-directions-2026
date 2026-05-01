@@ -8,7 +8,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from utils.theme import page_setup, hero, callout, footer, COLORS, STAGE_COLORS, stage_chip, style_fig
+from utils.theme import page_setup, hero, callout, footer, COLORS, STAGE_COLORS, stage_chip, style_fig, section, GOLD, LIGHTBLUE
 
 page_setup("Stages & SICR", icon="⛰️")
 hero(
@@ -16,6 +16,18 @@ hero(
     subtitle="How a loan moves between Stage 1, Stage 2 and Stage 3 — triggers, backstops, cure conditions.",
 )
 
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # ---------------------------------------------------------------------------
 # Stage definitions
@@ -40,7 +52,7 @@ for col, stage, title, body in [
 # ---------------------------------------------------------------------------
 # SICR rebuttable presumptions
 # ---------------------------------------------------------------------------
-st.subheader("SICR — rebuttable presumptions (the 30 / 60-day backstops)")
+section("SICR — rebuttable presumptions (the 30 / 60-day backstops)")
 
 sicr = pd.DataFrame(
     [
@@ -74,7 +86,7 @@ callout(
 # ---------------------------------------------------------------------------
 # Worked loan journey
 # ---------------------------------------------------------------------------
-st.subheader("Worked example — loan journey through stages")
+section("Worked example — loan journey through stages")
 st.caption("Hypothetical ₹10 cr corporate term loan — 5 years, 10% coupon, secured.")
 
 journey = pd.DataFrame(
@@ -123,7 +135,7 @@ st.plotly_chart(fig, use_container_width=True)
 # ---------------------------------------------------------------------------
 # Cure conditions
 # ---------------------------------------------------------------------------
-st.subheader("Cure & upgrade conditions")
+section("Cure & upgrade conditions")
 st.markdown(
     """
     - **Stage 3 → Stage 2:** Account becomes *standard* (entire arrears cleared across all facilities of

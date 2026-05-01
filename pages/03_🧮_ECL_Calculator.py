@@ -9,7 +9,7 @@ import streamlit as st
 
 from utils import ecl_engine as e
 from utils.theme import (
-    page_setup, hero, callout, footer, COLORS, style_fig, fmt_inr, fmt_pct, show_table,
+    page_setup, hero, callout, footer, COLORS, style_fig, fmt_inr, fmt_pct, show_table, section, GOLD, LIGHTBLUE,
 )
 
 page_setup("ECL Calculator", icon="🧮")
@@ -18,6 +18,18 @@ hero(
     subtitle="Build the loss expectation period-by-period and check the prudential floor on top.",
 )
 
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # ---------------------------------------------------------------------------
 # Inputs
@@ -25,7 +37,7 @@ hero(
 left, right = st.columns([1, 2])
 
 with left:
-    st.subheader("Loan inputs")
+    section("Loan inputs")
     ead = st.number_input("EAD — Exposure at Default (₹ cr)", min_value=0.1, value=10.0, step=0.5) * 1e7
     coupon_eir = st.number_input("EIR (decimal)", min_value=0.0, max_value=0.5, value=0.10, step=0.005, format="%.3f")
     lgd = st.slider("LGD (Loss Given Default)", 0.0, 1.0, 0.40, 0.01,
@@ -69,7 +81,7 @@ total_ecl = e.ecl_total(table)
 # Floor check
 st.session_state.setdefault("category_choice", "(ii)")
 with right:
-    st.subheader("Floor check")
+    section("Floor check")
     cat = st.selectbox(
         "Loan category (Section N)",
         options=e.S1_S2_FLOORS["code"] + " — " + e.S1_S2_FLOORS["category"],
@@ -92,7 +104,7 @@ with right:
     bcol2.metric("Reported ECL", fmt_inr(reported), delta=f"{(reported-total_ecl)/max(1,total_ecl)*100:+.1f}% vs model")
     bcol3.metric("Floor binding?", binding)
 
-    st.subheader("Period-by-period table")
+    section("Period-by-period table")
     show_table(table, {
         "PD": "{:.4f}",
         "LGD": "{:.2%}",
@@ -105,7 +117,7 @@ with right:
 # ---------------------------------------------------------------------------
 # Visualisation: cumulative ECL build-up
 # ---------------------------------------------------------------------------
-st.subheader("How loss expectation accumulates over the horizon")
+section("How loss expectation accumulates over the horizon")
 cum = table.copy()
 cum["Cumulative ECL (₹)"] = cum["Period ECL (₹)"].cumsum()
 fig = go.Figure()

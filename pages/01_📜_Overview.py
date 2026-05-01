@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from utils.theme import page_setup, hero, callout, footer, COLORS, style_fig
+from utils.theme import page_setup, hero, callout, footer, COLORS, style_fig, section, GOLD, LIGHTBLUE
 
 page_setup("Overview", icon="📜")
 hero(
@@ -18,10 +18,23 @@ hero(
     ),
 )
 
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
 # ---------------------------------------------------------------------------
 # Pillars
 # ---------------------------------------------------------------------------
-st.subheader("Pillar 1 — ECL-based staging")
+section("Pillar 1 — ECL-based staging")
 st.markdown(
     """
     The 3-stage ECL model replaces the **incurred-loss** approach. Each financial instrument is
@@ -39,7 +52,7 @@ st.markdown(
     """
 )
 
-st.subheader("Pillar 2 — Forward-looking provisioning")
+section("Pillar 2 — Forward-looking provisioning")
 st.markdown(
     """
     ECL is the **probability-weighted** average of credit losses across multiple macroeconomic
@@ -49,7 +62,7 @@ st.markdown(
     """
 )
 
-st.subheader("Pillar 3 — EIR measurement at amortised cost")
+section("Pillar 3 — EIR measurement at amortised cost")
 st.markdown(
     """
     Income recognition moves from the **contractual rate** to the **Effective Interest Rate (EIR)**.
@@ -63,7 +76,7 @@ st.markdown(
 # ---------------------------------------------------------------------------
 # Timeline visual
 # ---------------------------------------------------------------------------
-st.subheader("Implementation timeline")
+section("Implementation timeline")
 
 events = [
     ("2026-04-27", "Circular issued"),
@@ -101,7 +114,7 @@ st.plotly_chart(fig, use_container_width=True)
 # ---------------------------------------------------------------------------
 left, right = st.columns(2)
 with left:
-    st.subheader("Applicability")
+    section("Applicability")
     st.markdown(
         """
         - **Applies to:** All Commercial Banks including SBI, banking companies, corresponding new banks.
@@ -114,7 +127,7 @@ with left:
     )
 
 with right:
-    st.subheader("Expected impact on bank financials")
+    section("Expected impact on bank financials")
     st.markdown(
         """
         - **Higher Day-1 provisioning** — Stage 1 ECL applies to the entire performing book (a new cost

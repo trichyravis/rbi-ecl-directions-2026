@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from utils.theme import page_setup, hero, callout, footer
+from utils.theme import page_setup, hero, callout, footer, section, GOLD, LIGHTBLUE
 
 page_setup("About", icon="🏔️")
 hero(
@@ -12,8 +12,21 @@ hero(
     subtitle="A teaching companion for the RBI ECL Directions, 2026 — by The Mountain Path Academy.",
 )
 
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-st.subheader("What this app is")
+
+section("What this app is")
 st.markdown(
     """
     A multi-page Streamlit application that walks practitioners through the RBI's expected-credit-loss
@@ -28,7 +41,7 @@ st.markdown(
 )
 
 
-st.subheader("Source")
+section("Source")
 st.markdown(
     """
     - **RBI Circular DOR.STR.REC.No.6/21.06.011/2026-27**, dated 27-Apr-2026.
@@ -38,7 +51,7 @@ st.markdown(
 )
 
 
-st.subheader("Module map")
+section("Module map")
 st.markdown(
     """
     | Module | Purpose |
@@ -60,7 +73,7 @@ st.markdown(
 )
 
 
-st.subheader("Built with")
+section("Built with")
 st.markdown(
     "- **Python** + **Streamlit** for the UI\n"
     "- **pandas** + **numpy** for the data layer\n"

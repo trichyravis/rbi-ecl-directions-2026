@@ -9,6 +9,7 @@ import streamlit as st
 from utils import ecl_engine as e
 from utils.theme import (
     page_setup, hero, callout, footer, COLORS, style_fig, fmt_inr, fmt_pct,
+    section, GOLD, LIGHTBLUE,
 )
 
 page_setup("Floors — Stage 3", icon="📏")
@@ -17,6 +18,18 @@ hero(
     subtitle="Floors increase progressively with time in Stage 3. Three buckets cover the entire product universe.",
 )
 
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # ---------------------------------------------------------------------------
 # Reference tables
@@ -31,20 +44,20 @@ def _show(table: pd.DataFrame, name: str):
     else:
         st.dataframe(df, use_container_width=True, hide_index=True)
 
-st.subheader("Table A — General categories (i)–(vi), (xii), (xiv), (xv)")
+section("Table A — General categories (i)–(vi), (xii), (xiv), (xv)")
 _show(e.S3_FLOORS_GENERAL, "general")
 
-st.subheader("Table B — Lower-risk categories (vii)–(ix), (xi-a), (xiii)")
+section("Table B — Lower-risk categories (vii)–(ix), (xi-a), (xiii)")
 _show(e.S3_FLOORS_LOWER, "lower")
 
-st.subheader("Table C — Unsecured retail (x)")
+section("Table C — Unsecured retail (x)")
 _show(e.S3_FLOORS_UNSECURED_RETAIL, "ur")
 
 
 # ---------------------------------------------------------------------------
 # Worked example
 # ---------------------------------------------------------------------------
-st.subheader("Worked example — single Stage-3 account")
+section("Worked example — single Stage-3 account")
 
 c1, c2 = st.columns([1, 2])
 with c1:
@@ -79,7 +92,7 @@ with c2:
 # ---------------------------------------------------------------------------
 # Progressive floor visual — same secured/unsecured split, every bucket
 # ---------------------------------------------------------------------------
-st.subheader("Progressive floor across buckets — same exposure, every duration")
+section("Progressive floor across buckets — same exposure, every duration")
 rows = []
 for bucket in chosen_table["bucket"]:
     r = e.stage3_floor(secured, unsecured, bucket, chosen_table)

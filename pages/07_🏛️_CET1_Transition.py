@@ -9,6 +9,7 @@ import streamlit as st
 from utils import ecl_engine as e
 from utils.theme import (
     page_setup, hero, callout, footer, COLORS, style_fig, fmt_inr, show_table,
+    section, GOLD, LIGHTBLUE,
 )
 
 page_setup("CET1 Transition", icon="🏛️")
@@ -20,7 +21,20 @@ hero(
     ),
 )
 
-st.subheader("Inputs")
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+section("Inputs")
 c1, c2, c3 = st.columns(3)
 with c1:
     ecl0 = st.number_input("ECL on 1-Apr-2027 (₹ cr)", min_value=0.0, value=12000.0, step=100.0)
@@ -38,7 +52,7 @@ c1.metric("Gross transitional shortfall", f"₹{gross:,.1f} cr")
 c2.metric("Net (post-tax) shortfall",     f"₹{net:,.1f} cr")
 c3.metric("Effective tax shield",         f"₹{gross-net:,.1f} cr")
 
-st.subheader("Phased CET1 add-back")
+section("Phased CET1 add-back")
 show_table(table, {
     "Fraction (f)": "{:.2f}",
     "Net Shortfall (₹ cr)": "{:,.1f}",

@@ -5,13 +5,26 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from utils.theme import page_setup, hero, callout, footer
+from utils.theme import page_setup, hero, callout, footer, section, GOLD, LIGHTBLUE
 
 page_setup("IRAC vs ECL", icon="🔁")
 hero(
     title="IRAC vs ECL — what changes, dimension by dimension",
     subtitle="A side-by-side reading of the old incurred-loss regime against the new expected-loss framework.",
 )
+
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 table = pd.DataFrame(
     [
@@ -35,7 +48,7 @@ st.dataframe(table, use_container_width=True, hide_index=True)
 # ---------------------------------------------------------------------------
 # Expected impact
 # ---------------------------------------------------------------------------
-st.subheader("Expected impact on bank financials")
+section("Expected impact on bank financials")
 st.markdown(
     """
     - **Higher Day-1 provisioning:** Stage 1 ECL applies on the entire performing book — a new cost
@@ -54,7 +67,7 @@ st.markdown(
 # ---------------------------------------------------------------------------
 # Special cases
 # ---------------------------------------------------------------------------
-st.subheader("Additional provisions & special cases")
+section("Additional provisions & special cases")
 st.markdown(
     """
     - **Stressed assets** — additional provisioning per the *Resolution of Stressed Assets Directions, 2025*.

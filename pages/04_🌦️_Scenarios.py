@@ -8,7 +8,7 @@ import streamlit as st
 
 from utils import ecl_engine as e
 from utils.theme import (
-    page_setup, hero, callout, footer, COLORS, style_fig, fmt_inr, fmt_pct, show_table,
+    page_setup, hero, callout, footer, COLORS, style_fig, fmt_inr, fmt_pct, show_table, section, GOLD, LIGHTBLUE,
 )
 
 page_setup("Scenarios", icon="🌦️")
@@ -17,16 +17,28 @@ hero(
     subtitle="ECL must be unbiased — neither worst-case nor best-case. Build base / upside / downside and weight them.",
 )
 
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # ---------------------------------------------------------------------------
 # Inputs — common loan + scenarios
 # ---------------------------------------------------------------------------
 with st.sidebar:
-    st.subheader("Common loan parameters")
+    section("Common loan parameters")
     ead = st.number_input("EAD (₹ cr)", min_value=0.1, value=10.0, step=0.5) * 1e7
     lgd = st.slider("LGD", 0.0, 1.0, 0.40, 0.01)
 
-st.subheader("Edit your scenarios")
+section("Edit your scenarios")
 default = pd.DataFrame(
     [
         {"Scenario": "Upside",   "Narrative": "GDP > 7%, low NPAs, easing rates",            "12-mo PD": 0.005, "Probability": 0.20},
@@ -86,6 +98,7 @@ show_table(res, {
 # ---------------------------------------------------------------------------
 # Charts
 # ---------------------------------------------------------------------------
+section("Scenario comparison charts")
 left, right = st.columns(2)
 with left:
     fig = go.Figure()

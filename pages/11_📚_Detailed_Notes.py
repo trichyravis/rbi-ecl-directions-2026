@@ -4,13 +4,26 @@ from __future__ import annotations
 
 import streamlit as st
 
-from utils.theme import page_setup, hero, callout, footer
+from utils.theme import page_setup, hero, callout, footer, section, GOLD, LIGHTBLUE
 
 page_setup("Detailed Notes", icon="📚")
 hero(
     title="Detailed notes — chapter by chapter",
     subtitle="Comprehensive reference notes for the RBI ECL Directions, 2026 — searchable by section.",
 )
+
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # Search box -----------------------------------------------------------------
 query = st.text_input("🔍 Search notes (case-insensitive)", "")

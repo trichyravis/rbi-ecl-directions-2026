@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from utils.theme import page_setup, hero, callout, footer
+from utils.theme import page_setup, hero, callout, footer, section, GOLD, LIGHTBLUE
 
 page_setup("Exceptions", icon="🪶")
 hero(
@@ -15,7 +15,20 @@ hero(
     ),
 )
 
-st.subheader("1 · NPA classification — exceptions (Chapter II)")
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+section("1 · NPA classification — exceptions (Chapter II)")
 st.markdown(
     """
     - **Bills under Letter of Credit (LC):** Not classified as NPA even if other facilities of the
@@ -30,7 +43,7 @@ st.markdown(
     """
 )
 
-st.subheader("2 · SICR — exemptions (Chapter III)")
+section("2 · SICR — exemptions (Chapter III)")
 st.markdown(
     "The following instruments are NOT tested for SICR and do NOT require Stage 1 ECL:\n"
     "- Statutory Liquidity Ratio (SLR)-eligible investments\n"
@@ -41,7 +54,7 @@ st.markdown(
 )
 
 
-st.subheader("3 · Additional provisions & special cases (Chapter VII)")
+section("3 · Additional provisions & special cases (Chapter VII)")
 st.markdown(
     """
     - **Stressed Assets Resolution:** Additional provisioning per the *Resolution of Stressed Assets
@@ -77,7 +90,7 @@ callout(
     kind="warn",
 )
 
-st.subheader("Decision tree — quick reference")
+section("Decision tree — quick reference")
 st.markdown(
     """
     ```

@@ -9,7 +9,7 @@ import streamlit as st
 
 from utils import ecl_engine as e
 from utils.theme import (
-    page_setup, hero, callout, footer, COLORS, style_fig, fmt_inr, fmt_pct, show_table,
+    page_setup, hero, callout, footer, COLORS, style_fig, fmt_inr, fmt_pct, show_table, section, GOLD, LIGHTBLUE,
 )
 
 page_setup("Floors — Stage 1 & 2", icon="📐")
@@ -18,11 +18,23 @@ hero(
     subtitle="Banks' own ECL estimates must be at least equal to these floors. Applied at the portfolio level per product category.",
 )
 
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # ---------------------------------------------------------------------------
 # Reference table
 # ---------------------------------------------------------------------------
-st.subheader("All 15 categories")
+section("All 15 categories")
 disp = e.S1_S2_FLOORS.copy()
 disp["Stage 1 floor"] = disp["stage1_floor"].apply(lambda x: fmt_pct(x, 3) if pd.notna(x) else "—")
 disp["Stage 2 floor"] = disp["stage2_floor"].apply(
@@ -46,7 +58,7 @@ callout(
 # ---------------------------------------------------------------------------
 # Portfolio floor calculator
 # ---------------------------------------------------------------------------
-st.subheader("Portfolio-level floor application")
+section("Portfolio-level floor application")
 st.caption("Edit the rows below — the calculator returns reported ECL = MAX(model, floor) per line.")
 
 default_portfolio = pd.DataFrame(
@@ -119,7 +131,7 @@ c3.metric("% uplift from floors", f"{(delta/max(0.01,total_model))*100:+.1f}%")
 # ---------------------------------------------------------------------------
 # Visual: floors across all categories
 # ---------------------------------------------------------------------------
-st.subheader("Floors at a glance")
+section("Floors at a glance")
 plot_df = e.S1_S2_FLOORS.copy()
 plot_df["Stage 2 floor (visual)"] = plot_df["stage2_floor"].fillna(0.0)  # DCCO shown as 0 with note
 plot_df["DCCO?"] = plot_df["stage2_floor"].isna()

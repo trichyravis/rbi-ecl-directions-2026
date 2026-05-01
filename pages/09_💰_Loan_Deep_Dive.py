@@ -10,6 +10,7 @@ import streamlit as st
 from utils import ecl_engine as e
 from utils.theme import (
     page_setup, hero, callout, footer, COLORS, STAGE_COLORS, style_fig, fmt_inr, fmt_pct, show_table,
+    section, GOLD, LIGHTBLUE,
 )
 
 page_setup("Loan Deep-Dive", icon="💰")
@@ -18,11 +19,23 @@ hero(
     subtitle="Walks a hypothetical ₹100 cr corporate loan with an upfront fee through every step.",
 )
 
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # ---------------------------------------------------------------------------
 # 1. Inputs
 # ---------------------------------------------------------------------------
-st.subheader("1 · Loan terms")
+section("1 · Loan terms")
 c1, c2, c3, c4 = st.columns(4)
 principal = c1.number_input("Principal disbursed (₹ cr)", min_value=1.0, value=100.0, step=10.0) * 1e7
 coupon = c2.number_input("Contractual coupon", min_value=0.0, max_value=0.4, value=0.10, step=0.005, format="%.3f")
@@ -40,7 +53,7 @@ tax = c3.slider("Tax rate", 0.0, 0.5, 0.252, 0.001, format="%.3f")
 # ---------------------------------------------------------------------------
 schedule, cashflows, eir = e.equal_principal_schedule(principal, coupon, int(tenor), fee)
 
-st.subheader("2 · EIR derivation")
+section("2 · EIR derivation")
 st.caption("EIR is the rate that discounts the contractual cash flows back to the NET amount disbursed (= principal − upfront fee).")
 
 c1, c2, c3 = st.columns(3)
@@ -61,7 +74,7 @@ callout(
 # ---------------------------------------------------------------------------
 # 3. Amortised cost vs contractual
 # ---------------------------------------------------------------------------
-st.subheader("3 · Amortised cost using EIR (vs contractual coupon)")
+section("3 · Amortised cost using EIR (vs contractual coupon)")
 ac = e.amortised_cost_table(principal, coupon, int(tenor), fee, eir)
 show_table(ac, {c: "{:,.0f}" for c in ac.columns if c != "Year"})
 
@@ -80,7 +93,7 @@ st.plotly_chart(fig, use_container_width=True)
 # ---------------------------------------------------------------------------
 # 4. ECL across stages
 # ---------------------------------------------------------------------------
-st.subheader("4 · ECL across the three stages")
+section("4 · ECL across the three stages")
 
 # Use opening AC each year as EAD
 eads = ac["Opening AC (₹)"].tolist()
@@ -129,7 +142,7 @@ with st.expander("📑 Period-by-period ECL table (lifetime view)"):
 # ---------------------------------------------------------------------------
 # 5. P&L migration impact
 # ---------------------------------------------------------------------------
-st.subheader("5 · P&L impact as the loan migrates")
+section("5 · P&L impact as the loan migrates")
 pnl = e.stage_migration_pnl(s1, s2, s3, tax)
 show_table(pnl, {c: "{:,.0f}" for c in pnl.columns if c != "Migration"})
 
@@ -151,7 +164,7 @@ st.plotly_chart(fig, use_container_width=True)
 # ---------------------------------------------------------------------------
 # 6. Key takeaways
 # ---------------------------------------------------------------------------
-st.subheader("6 · Key takeaways")
+section("6 · Key takeaways")
 st.markdown(
     f"""
     - **EIR ({fmt_pct(eir,4)})** > coupon ({fmt_pct(coupon,2)}) because the upfront fee is

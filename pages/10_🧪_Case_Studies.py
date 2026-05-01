@@ -19,6 +19,7 @@ import streamlit as st
 from utils import ecl_engine as e
 from utils.theme import (
     page_setup, hero, callout, footer, COLORS, STAGE_COLORS, style_fig, fmt_inr, fmt_pct, stage_chip, show_table,
+    section, GOLD, LIGHTBLUE,
 )
 
 page_setup("Case Studies", icon="🧪")
@@ -29,6 +30,19 @@ hero(
         "special-case overlays and a bank-wide stress test."
     ),
 )
+
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 tabs = st.tabs([
     "🧍 Retail Unsecured",
@@ -44,7 +58,7 @@ tabs = st.tabs([
 # CASE 1 — Retail unsecured personal loan, Stage 1 → Stage 3 walk
 # ---------------------------------------------------------------------------
 with tabs[0]:
-    st.subheader("Case 1 — Retail unsecured personal loan")
+    section("Case 1 — Retail unsecured personal loan")
     st.caption("Demonstrates the **25% → 100%** floor escalation under Table C (Unsecured retail).")
 
     c1, c2, c3, c4 = st.columns(4)
@@ -97,7 +111,7 @@ with tabs[0]:
 # CASE 2 — Housing loan restructure + SICR rebuttal
 # ---------------------------------------------------------------------------
 with tabs[1]:
-    st.subheader("Case 2 — Housing loan restructured into 'standard' bucket")
+    section("Case 2 — Housing loan restructured into 'standard' bucket")
     st.caption("Shows the **5% Stage-1 / 10% Stage-2** floor for restructured-standard advances and the SICR rebuttal.")
 
     c1, c2, c3 = st.columns(3)
@@ -143,7 +157,7 @@ with tabs[1]:
 # CASE 3 — Project finance with DCCO delay
 # ---------------------------------------------------------------------------
 with tabs[2]:
-    st.subheader("Case 3 — Project finance with DCCO delay")
+    section("Case 3 — Project finance with DCCO delay")
     st.caption("Shows the **DCCO-linked Stage-2 floor** for pre-operational project-finance exposures.")
 
     c1, c2, c3 = st.columns(3)
@@ -198,7 +212,7 @@ with tabs[2]:
 # CASE 4 — Wilful defaulter / fraud overlays
 # ---------------------------------------------------------------------------
 with tabs[3]:
-    st.subheader("Case 4 — Wilful defaulter and fraud overlays")
+    section("Case 4 — Wilful defaulter and fraud overlays")
     st.caption("Layer the special-case provisions on top of base ECL.")
 
     c1, c2, c3 = st.columns(3)
@@ -251,7 +265,7 @@ with tabs[3]:
 # CASE 5 — Trade receivables, simplified provision matrix (Annex 2)
 # ---------------------------------------------------------------------------
 with tabs[4]:
-    st.subheader("Case 5 — Trade receivables under the simplified approach (Annex 2)")
+    section("Case 5 — Trade receivables under the simplified approach (Annex 2)")
     st.caption("Always lifetime ECL via a provision matrix — historical loss rate × forward-looking adjustment.")
 
     default_ageing = pd.DataFrame(
@@ -295,7 +309,7 @@ with tabs[4]:
 # CASE 6 — Bank-wide portfolio stress test
 # ---------------------------------------------------------------------------
 with tabs[5]:
-    st.subheader("Case 6 — Bank-wide portfolio stress test")
+    section("Case 6 — Bank-wide portfolio stress test")
     st.caption("Mixed book across categories. Apply a macro shock to PDs and watch the capital impact unfold.")
 
     # Default portfolio --------------------------------------------------------

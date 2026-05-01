@@ -5,13 +5,26 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from utils.theme import page_setup, hero, footer
+from utils.theme import page_setup, hero, footer, section, GOLD, LIGHTBLUE
 
 page_setup("Glossary", icon="📖")
 hero(
     title="Glossary — every abbreviation in the circular",
     subtitle="A reading aid for newcomers to the framework.",
 )
+
+with st.sidebar:
+    st.markdown(
+        f"""
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid {GOLD};">
+            <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:{GOLD};">
+                THE MOUNTAIN PATH
+            </div>
+            <div style="color:{LIGHTBLUE}; font-style:italic; font-size:0.85rem;">World of Finance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 GLOSSARY = pd.DataFrame(
     [
