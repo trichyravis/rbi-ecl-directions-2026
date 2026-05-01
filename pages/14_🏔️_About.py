@@ -82,6 +82,19 @@ st.markdown(
 )
 
 
+section("Author")
+st.markdown(
+    """
+    **Prof. V. Ravichandran** — The Mountain Path Academy
+
+    - [LinkedIn](https://www.linkedin.com/in/trichyravis/)
+    - [GitHub](https://github.com/trichyravis)
+    - Email: trichyravis@gmail.com
+    - Web: [themountainpathacademy.com](https://themountainpathacademy.com)
+    """
+)
+
+
 callout(
     "<b>Disclaimer.</b> This application is an educational illustration only. It is not investment, "
     "accounting, legal or regulatory advice. For implementation in a regulated bank, consult the "

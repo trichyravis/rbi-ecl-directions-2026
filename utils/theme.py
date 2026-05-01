@@ -516,7 +516,10 @@ def footer():
             <span class="gold">The Mountain Path &mdash; World of Finance</span> &nbsp;&bull;&nbsp;
             Prof. V. Ravichandran &nbsp;&bull;&nbsp;
             <i>Bridging Theory with Practice</i> &nbsp;&bull;&nbsp;
-            <a href="https://themountainpathacademy.com" target="_blank" style="color:{GOLD};text-decoration:none;">themountainpathacademy.com</a>
+            <a href="https://themountainpathacademy.com" target="_blank" style="color:{GOLD};text-decoration:none;">themountainpathacademy.com</a> &nbsp;&bull;&nbsp;
+            <a href="https://www.linkedin.com/in/trichyravis/" target="_blank" style="color:{GOLD};text-decoration:none;">LinkedIn</a> &nbsp;&bull;&nbsp;
+            <a href="https://github.com/trichyravis" target="_blank" style="color:{GOLD};text-decoration:none;">GitHub</a> &nbsp;&bull;&nbsp;
+            <a href="mailto:trichyravis@gmail.com" style="color:{GOLD};text-decoration:none;">trichyravis@gmail.com</a>
             <br/>
             Source: RBI Circular DOR.STR.REC.No.6/21.06.011/2026-27 dated 27-Apr-2026
             &nbsp;&bull;&nbsp; Effective 1-Apr-2027
